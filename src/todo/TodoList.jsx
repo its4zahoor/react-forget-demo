@@ -2,10 +2,11 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ColorPicker, RenderCounter } from "../components";
 import { Todo, AddTodo, Filter } from "./components";
-
+import { useRenderCounter } from "../hooks/useRenderCounter";
 import styles from "./TodoList.module.css";
 
 export const TodoList = () => {
+  const filterCount = useRenderCounter("filter");
   const [color, setColor] = useState("#045975");
   const [filter, setFilter] = useState("all");
   const [todos, setTodos] = useState([
@@ -49,13 +50,22 @@ export const TodoList = () => {
     209.21deg,
     rgb(8, 126, 164) 13.57%,
     ${color} 98.38%
-  )`;
+    )`;
+
+  const filterState = {
+    completed: true,
+    active: false,
+  }[filter];
+
+  let filteredTodos = todos;
+  if (filter !== "all")
+    filteredTodos = todos.filter((x) => x.isDone === filterState);
 
   return (
     <div className={styles.todoList}>
       <RenderCounter className={styles.counter} label="list" />
       <div className={styles.text}>
-        Filter was called <span className={styles.count}></span>
+        Filter was called <span className={styles.count}>{filterCount}</span>
         times
       </div>
       <div className={styles.listBlock} style={{ background: bgGradient }}>
@@ -63,9 +73,9 @@ export const TodoList = () => {
           <ColorPicker color={color} onChange={setColor} />
           <Filter filter={filter} onFilter={setFilter} />
         </div>
-        {todos.length ? (
+        {filteredTodos.length ? (
           <ul className={styles.list}>
-            {todos.map((todo) => (
+            {filteredTodos.map((todo) => (
               <Todo key={todo.id} todo={todo} onChange={handleDone} />
             ))}
           </ul>

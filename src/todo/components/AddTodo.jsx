@@ -5,6 +5,12 @@ import styles from "./AddTodo.module.css";
 
 export const AddTodo = ({ onSubmit }) => {
   const [todo, setTodo] = useState("");
+
+  const handleSubmit = () => {
+    onSubmit(todo);
+    setTodo("");
+  };
+
   return (
     <div className={styles.add}>
       <input
@@ -13,7 +19,7 @@ export const AddTodo = ({ onSubmit }) => {
         value={todo}
         placeholder="Type"
       />
-      <button className={styles.button} onClick={() => onSubmit(todo)}>
+      <button type="submit" className={styles.button} onClick={handleSubmit}>
         Add
       </button>
       <RenderCounter className={styles.counter} label="addTodo" />
