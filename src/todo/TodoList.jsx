@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ColorPicker, RenderCounter } from "../components";
-import { Todo, AddTodo, Filter } from "./components";
+import { TodoMemo, AddTodo, Filter } from "./components";
 import { useRenderCounter } from "../hooks/useRenderCounter";
 import styles from "./TodoList.module.css";
 
@@ -27,24 +27,25 @@ export const TodoList = () => {
     },
   ]);
 
-  const handleDone = (id) => {
-    const idx = todos.findIndex((x) => x.id === id);
-    const copyTodo = [...todos];
-    copyTodo[idx].isDone = !todos[idx].isDone;
-    setTodos(copyTodo);
-  };
+  const handleDone = useCallback((id) => {
+    setTodos((todos) => {
+      const idx = todos.findIndex((x) => x.id === id);
+      const copyTodo = [...todos];
+      copyTodo[idx].isDone = !todos[idx].isDone;
+      return copyTodo;
+    });
+  }, []);
 
-  const handleAdd = (text) => {
-    const copyTodo = [
+  const handleAdd = useCallback((text) => {
+    setTodos((todos) => [
       ...todos,
       {
         id: uuidv4(),
         text,
         isDone: false,
       },
-    ];
-    setTodos(copyTodo);
-  };
+    ]);
+  }, []);
 
   const bgGradient = `linear-gradient(
     209.21deg,
@@ -52,14 +53,16 @@ export const TodoList = () => {
     ${color} 98.38%
     )`;
 
-  const filterState = {
-    completed: true,
-    active: false,
-  }[filter];
+  let filteredTodos = useMemo(() => {
+    const filterState = {
+      completed: true,
+      active: false,
+    };
 
-  let filteredTodos = todos;
-  if (filter !== "all")
-    filteredTodos = todos.filter((x) => x.isDone === filterState);
+    return filter === "all"
+      ? todos
+      : todos.filter((x) => x.isDone === filterState[filter]);
+  }, [todos, filter]);
 
   return (
     <div className={styles.todoList}>
@@ -76,7 +79,7 @@ export const TodoList = () => {
         {filteredTodos.length ? (
           <ul className={styles.list}>
             {filteredTodos.map((todo) => (
-              <Todo key={todo.id} todo={todo} onChange={handleDone} />
+              <TodoMemo key={todo.id} {...todo} onChange={handleDone} />
             ))}
           </ul>
         ) : (
