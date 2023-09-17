@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { RenderCounter } from "../../components";
 
 import styles from "./AddTodo.module.css";
@@ -26,3 +26,5 @@ export const AddTodo = ({ onSubmit }) => {
     </div>
   );
 };
+
+export const AddTodoMemo = React.memo(AddTodo);

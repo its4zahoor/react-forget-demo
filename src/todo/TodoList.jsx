@@ -1,12 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ColorPicker, RenderCounter } from "../components";
-import { TodoMemo, AddTodo, Filter } from "./components";
-import { useRenderCounter } from "../hooks/useRenderCounter";
+import { TodoMemo, AddTodoMemo, FilterMemo } from "./components";
+import { renders } from "../hooks/useRenderCounter";
 import styles from "./TodoList.module.css";
 
 export const TodoList = () => {
-  const filterCount = useRenderCounter("filter");
   const [color, setColor] = useState("#045975");
   const [filter, setFilter] = useState("all");
   const [todos, setTodos] = useState([
@@ -37,6 +36,7 @@ export const TodoList = () => {
   }, []);
 
   const handleAdd = useCallback((text) => {
+    if (!text) return;
     setTodos((todos) => [
       ...todos,
       {
@@ -58,6 +58,7 @@ export const TodoList = () => {
       completed: true,
       active: false,
     };
+    renders.count("filtered");
 
     return filter === "all"
       ? todos
@@ -68,13 +69,14 @@ export const TodoList = () => {
     <div className={styles.todoList}>
       <RenderCounter className={styles.counter} label="list" />
       <div className={styles.text}>
-        Filter was called <span className={styles.count}>{filterCount}</span>
+        Filter was called{" "}
+        <span className={styles.count}>{renders.get("filtered")}</span>
         times
       </div>
       <div className={styles.listBlock} style={{ background: bgGradient }}>
         <div className={styles.top}>
           <ColorPicker color={color} onChange={setColor} />
-          <Filter filter={filter} onFilter={setFilter} />
+          <FilterMemo filter={filter} onFilter={setFilter} />
         </div>
         {filteredTodos.length ? (
           <ul className={styles.list}>
@@ -85,7 +87,7 @@ export const TodoList = () => {
         ) : (
           <div className={styles.noTodos}>No todos found :(</div>
         )}
-        <AddTodo onSubmit={handleAdd} />
+        <AddTodoMemo onSubmit={handleAdd} />
       </div>
     </div>
   );

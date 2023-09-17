@@ -1,3 +1,3 @@
-export { AddTodo } from "./AddTodo";
-export { Filter } from "./Filter";
+export { AddTodo, AddTodoMemo } from "./AddTodo";
+export { Filter, FilterMemo } from "./Filter";
 export { Todo, TodoMemo } from "./Todo";

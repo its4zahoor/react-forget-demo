@@ -1,3 +1,4 @@
+import React from "react";
 import { RenderCounter } from "../../components";
 
 import styles from "./Filter.module.css";
@@ -39,3 +40,5 @@ export const Filter = ({ filter, onFilter }) => {
     </div>
   );
 };
+
+export const FilterMemo = React.memo(Filter);
