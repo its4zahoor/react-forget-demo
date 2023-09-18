@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ColorPicker, RenderCounter } from "../components";
 import { Todo, AddTodo, Filter } from "./components";
@@ -27,16 +27,16 @@ export const TodoList = () => {
     },
   ]);
 
-  const handleDone = (id) => {
+  const handleDone = useCallback((id) => {
     setTodos((todos) => {
       const idx = todos.findIndex((x) => x.id === id);
       const copyTodo = [...todos];
       copyTodo[idx].isDone = !todos[idx].isDone;
       return copyTodo;
     });
-  };
+  }, []);
 
-  const handleAdd = (text) => {
+  const handleAdd = useCallback((text) => {
     if (!text) return;
     setTodos((todos) => [
       ...todos,
@@ -46,7 +46,7 @@ export const TodoList = () => {
         isDone: false,
       },
     ]);
-  };
+  }, []);
 
   const bgGradient = `linear-gradient(
     209.21deg,
@@ -54,7 +54,7 @@ export const TodoList = () => {
     ${color} 98.38%
     )`;
 
-  const filteredTodos = (() => {
+  const filteredTodos = useMemo(() => {
     const filterState = {
       completed: true,
       active: false,
@@ -64,7 +64,7 @@ export const TodoList = () => {
     return filter === "all"
       ? structuredClone(todos)
       : todos.filter((x) => x.isDone === filterState[filter]);
-  })();
+  }, [todos, filter]);
 
   return (
     <div className={styles.todoList}>
