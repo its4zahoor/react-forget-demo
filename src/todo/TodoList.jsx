@@ -53,7 +53,7 @@ export const TodoList = () => {
     ${color} 98.38%
     )`;
 
-  let filteredTodos = useMemo(() => {
+  const filteredTodos = useMemo(() => {
     const filterState = {
       completed: true,
       active: false,
@@ -61,7 +61,7 @@ export const TodoList = () => {
     renders.count("filtered");
 
     return filter === "all"
-      ? todos
+      ? structuredClone(todos)
       : todos.filter((x) => x.isDone === filterState[filter]);
   }, [todos, filter]);
 
@@ -81,7 +81,7 @@ export const TodoList = () => {
         {filteredTodos.length ? (
           <ul className={styles.list}>
             {filteredTodos.map((todo) => (
-              <TodoMemo key={todo.id} {...todo} onChange={handleDone} />
+              <TodoMemo key={todo.id} todo={todo} onChange={handleDone} />
             ))}
           </ul>
         ) : (

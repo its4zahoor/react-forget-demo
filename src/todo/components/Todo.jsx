@@ -2,7 +2,7 @@ import React from "react";
 import { RenderCounter } from "../../components";
 import styles from "./Todo.module.css";
 
-export const Todo = ({ id, text, isDone, onChange }) => {
+export const Todo = ({ todo, onChange }) => {
   console.log("TODO");
   return (
     <li className={styles.item}>
@@ -10,13 +10,13 @@ export const Todo = ({ id, text, isDone, onChange }) => {
         <input
           className={styles.input}
           type="checkbox"
-          checked={isDone}
-          onChange={() => onChange(id)}
+          checked={todo.isDone}
+          onChange={() => onChange(todo.id)}
         />
         <span className={styles.checkmark} />
-        <span className={styles.text}>{text}</span>
+        <span className={styles.text}>{todo.text}</span>
       </label>
-      <RenderCounter className={styles.counter} label={id} />
+      <RenderCounter className={styles.counter} label={todo.id} />
     </li>
   );
 };
