@@ -4,6 +4,12 @@ import styles from "./Todo.module.css";
 
 export const Todo = ({ todo, onChange }) => {
   console.log("TODO");
+
+  let startTime = performance.now();
+  while (performance.now() - startTime < 500) {
+    // Do nothing for 500 ms to emulate extremely slow code
+  }
+
   return (
     <li className={styles.item}>
       <label className={styles.label}>
