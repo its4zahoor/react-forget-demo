@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ColorPicker, RenderCounter } from "../components";
-import { Todo, AddTodo, Filter } from "./components";
-// import { Todo, AddTodo, Filter } from "./components/memo";
+// import { Todo, AddTodo, Filter } from "./components";
+import { Todo, AddTodo, Filter } from "./components/memo";
 import { renders } from "../hooks/useRenderCounter";
 import styles from "./TodoList.module.css";
 
