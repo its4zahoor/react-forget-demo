@@ -28,24 +28,23 @@ export const TodoList = () => {
   ]);
 
   const handleDone = (id) => {
-    setTodos((todos) => {
-      const idx = todos.findIndex((x) => x.id === id);
-      const copyTodo = [...todos];
-      copyTodo[idx].isDone = !todos[idx].isDone;
-      return copyTodo;
-    });
+    const idx = todos.findIndex((x) => x.id === id);
+    const copyTodo = [...todos];
+    copyTodo[idx].isDone = !todos[idx].isDone;
+    setTodos(copyTodo);
   };
 
   const handleAdd = (text) => {
     if (!text) return;
-    setTodos((todos) => [
+    const copyTodo = [
       ...todos,
       {
         id: uuidv4(),
         text,
         isDone: false,
       },
-    ]);
+    ];
+    setTodos(copyTodo);
   };
 
   const bgGradient = `linear-gradient(
